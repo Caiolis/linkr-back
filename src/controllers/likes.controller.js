@@ -1,11 +1,12 @@
 import { likesSELECT,likesINSERT,likesDELETEfrom,likesSELECTJoined } from "../repositories/likes.repository.js";
+import { selectSession } from "../repositories/session.repository.js";
 export async function likesGET(req, res) 
 {
 	const { token } = req.headers
 	const { post_id} = req.body
 	try
 	{	
-		const session = await db.query(`SELECT * FROM sessions WHERE token = $1`,[token])
+		const session = selectSession(token)
 		const user_id = session.rows[0].user_id
 		const likes = await likesSELECT(post_id)
 		const userLikes = await db.query(`SELECT * FROM users WHERE post_id = $1 AND user_id = $2`,[post_id,user_id])
@@ -19,7 +20,7 @@ export async function likesPOST(req, res)
 	const { post_id} = req.body
 	try
 	{
-		const session = await db.query(`SELECT * FROM sessions WHERE token = $1`,[token])
+		const session = selectSession(token)
 		const user_id = session.rows[0].user_id
 		await likesINSERT(post_id, user_id)
 		return res.sendStatus(201)
@@ -31,7 +32,7 @@ export async function likesDELETE(req, res)
 	const { post_id} = req.body
 	try
 	{
-		const session = await db.query(`SELECT * FROM sessions WHERE token = $1`,[token])
+		const session = selectSession(token)
 		const user_id = session.rows[0].user_id
 		await likesDELETEfrom(post_id,user_id)
 		return res.sendStatus(201)
