@@ -7,3 +7,8 @@ export function publishPostIntoDb(link, description, userId) {
   );
 }
 
+export function getAllPostsFromDb() {
+  return db.query(
+    `SELECT posts.created_at, posts.link, posts.description, users.name, users.photo FROM posts JOIN users on posts.user_id = users.id ORDER BY posts.created_at DESC LIMIT 20;`
+  );
+}

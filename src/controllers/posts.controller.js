@@ -1,4 +1,4 @@
-import { publishPostIntoDb } from "../repositories/posts.repository.js";
+import { publishPostIntoDb, getAllPostsFromDb } from "../repositories/posts.repository.js";
 import { searchSessionByToken } from "../repositories/session.repository.js";
 
 export async function publishPost(req, res) {
@@ -11,5 +11,15 @@ export async function publishPost(req, res) {
     return res.status(201).send('Post published');
   } catch (error) {
     res.status(500).send({ message: error.message });
+  };
 };
-}
+
+export async function getAllPosts(req, res) {
+  try {
+    const query = await getAllPostsFromDb();
+
+    res.status(200).send(query.rows)
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  };
+};
