@@ -5,7 +5,7 @@ export default function alredy_have_pg(tabela,coluna,item){
 		const value = input.find((Element)=> Element[0]==item)
 		const select = `SELECT * FROM "${tabela}" WHERE "${coluna}" = $1`
 		try{
-			const finder = await DB.query(select,[value[1]])
+			const finder = await db.query(select,[value[1]])
 			if(finder.rowCount !== 0){
 			return res.status(409).send({message:`already have a ${coluna} with this value:${value[1]} `})
 		}

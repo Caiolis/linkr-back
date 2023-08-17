@@ -6,10 +6,12 @@ import { postSchema } from "../schemas/posts.schema.js";
 
 // Middlewares
 import { validateToken } from "../middlewares/session.middleware.js";
-import { publishPost } from "../controllers/posts.controller.js";
+import { deletePost, publishPost, updatePost } from "../controllers/posts.controller.js";
 
 const postRouter = Router();
 
 postRouter.post('/publish', schemaValidation(postSchema), validateToken, publishPost);
+postRouter.post('/delete-post/:id', validateToken, deletePost);
+postRouter.post('/update-post/:id', validateToken, updatePost);
 
 export default postRouter;
