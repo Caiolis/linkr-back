@@ -8,12 +8,13 @@ import { postSchema } from "../schemas/posts.schema.js";
 import { validateToken } from "../middlewares/session.middleware.js";
 
 // Controllers
-import { getAllPosts, publishPost } from "../controllers/posts.controller.js";
-
+import { deletePost, publishPost, updatePost, getAllPosts } from "../controllers/posts.controller.js";
 
 const postRouter = Router();
 
 postRouter.post('/publish', schemaValidation(postSchema), validateToken, publishPost);
 postRouter.get('/posts/all', getAllPosts)
+postRouter.post('/delete-post/:id', validateToken, deletePost);
+postRouter.post('/update-post/:id', validateToken, updatePost);
 
 export default postRouter;
