@@ -36,7 +36,9 @@ export async function likesDELETE(req, res)
 		const user_id = session.rows[0].user_id
 		await likesDELETEfrom(post_id,user_id)
 		return res.sendStatus(201)
-	}catch(err){return res.status(500).send({message: err.message})}
+	}catch(err){
+		return res.status(500).send({message: err.message})
+	}
 }
 export async function likesUSERSGET(req, res) 
 {
