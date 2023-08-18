@@ -16,9 +16,11 @@ export async function publishPost(req, res) {
 
 export async function getAllPosts(req, res) {
   try {
+    const user_id = await searchSessionByToken(res.locals.token);
     const query = await getAllPostsFromDb();
-
-    res.status(200).send(query.rows)
+    const newQuery = query.rows.map(post => ({...post, requested_by: user_id.rows[0].user_id}))
+    //user_id.rows[0].user_id
+    res.status(200).send(newQuery)
   } catch (error) {
     res.status(500).send({ message: error.message });
   };
