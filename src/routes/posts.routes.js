@@ -13,7 +13,7 @@ import { deletePost, publishPost, updatePost, getAllPosts } from "../controllers
 const postRouter = Router();
 
 postRouter.post('/publish', schemaValidation(postSchema), validateToken, publishPost);
-postRouter.get('/posts/all', getAllPosts)
+postRouter.get('/posts/all', validateToken, getAllPosts)
 postRouter.post('/delete-post/:id', validateToken, deletePost);
 postRouter.post('/update-post/:id', validateToken, updatePost);
 
