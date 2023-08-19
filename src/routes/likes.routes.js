@@ -3,8 +3,8 @@ import { likesDELETE, likesGET, likesPOST, likesUSERSGET } from "../controllers/
 import  { tokenvalidade } from "../middlewares/session.validaded.js"; 
 
 const likes = Router();
-likes.get('/likes', likesGET)
-likes.post('/likes',tokenvalidade, likesPOST)
+likes.post('/likes', likesGET)
+likes.post('/likes/send', likesPOST)
 likes.put('/likes/undone',tokenvalidade,likesDELETE)
 likes.get('/likes/users',likesUSERSGET)
 
