@@ -7,3 +7,4 @@ const userRouter = Router();
 userRouter.get("/search", tokenvalidade, searchBar);
 
 export default userRouter;
+
