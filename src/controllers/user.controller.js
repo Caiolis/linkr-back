@@ -9,12 +9,14 @@ export async function openUserPage(req, res){
     const { id } = req.params;
 
     try{
+        
         const session = await selectSession(token);
         if (session.rowCount === 0){
             return res.status(404).send("Usuário não está logado!");
         }
         const userPosts = await getUserPosts(id);
-        res.status(200).send(userPosts.rows);
+        const newUserPosts = userPosts.rows.map(post => ({...post, requested_by: session.rows[0].user_id}))
+        res.status(200).send(newUserPosts);
     }
     catch(error){
         res.status(500).send(error.message);
