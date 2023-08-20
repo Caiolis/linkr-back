@@ -24,3 +24,6 @@ export async function updateUserPost(description, post_id) {
   return await db.query(`UPDATE posts SET description = $1 WHERE id = $2;`, [description, post_id]);
 }
 
+export async function getUserPosts(id) {
+  return await db.query(`SELECT posts.*, users.name, users.photo FROM posts JOIN users on posts.user_id = users.id WHERE user_id = $1 ORDER BY posts.created_at DESC;`, [id]);
+}
