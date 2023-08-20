@@ -5,7 +5,7 @@ export  async function tokenvalidade(req,res,next){
 	try{
 		const finder = await db.query(select,[authorization.replace('Bearer',"").trim()])
 		if(finder.rowCount === 0){
-		return res.sendStatus(401)}
+		return res.sendtatus(401)}
 		req.finder = finder
 	}
 	catch(err){return res.status(500).send(err.message)}
