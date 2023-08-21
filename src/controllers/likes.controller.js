@@ -14,7 +14,8 @@ export async function likesGET(req, res)
 			return res.status(200).send({ likes:0 ,you:""});
 		}
 		const userLikes = await db.query(`SELECT * FROM likes WHERE post_id = $1 AND user_id = $2`,[post_id,user_id])
-		const you = userLikes.rowsCount !== 0 ? "Você e mais gente ":""
+		const you = userLikes.rowsCount !== 0 ? true:false
+		
 		return res.status(200).send({likes:likes.rowCount,you:you,
 		});
 	}catch(err){
@@ -28,8 +29,6 @@ export async function likesPOST(req, res)
 	{
 		const session = await selectSession(token)
 		const user_id = session.rows[0].user_id
-		console.log(user_id)
-		console.log(post_id)
 		await likesINSERT(post_id, user_id)
 		return res.sendStatus(201)
 	}catch(err){return res.status(500).send({message: err.message})}
@@ -40,10 +39,11 @@ export async function likesDELETE(req, res)
 	const { post_id} = req.body
 	try
 	{
-		const session = selectSession(token)
+		const session = await selectSession(token)
 		const user_id = session.rows[0].user_id
 		await likesDELETEfrom(post_id,user_id)
-		return res.sendStatus(201)
+		console.log(session.rows)
+		return res.status(201).send({you:session})
 	}catch(err){
 		return res.status(500).send({message: err.message})
 	}

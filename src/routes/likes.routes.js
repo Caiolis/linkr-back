@@ -5,7 +5,7 @@ import  { tokenvalidade } from "../middlewares/session.validaded.js";
 const likes = Router();
 likes.post('/likes', likesGET)
 likes.post('/likes/send', likesPOST)
-likes.put('/likes/undone',tokenvalidade,likesDELETE)
+likes.post('/likes/undone',likesDELETE)
 likes.get('/likes/users',likesUSERSGET)
 
 export default likes;
