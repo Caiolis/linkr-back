@@ -1,5 +1,6 @@
 import { deleteUserPost, publishPostIntoDb, selectUserPost, updateUserPost, getAllPostsFromDb } from "../repositories/posts.repository.js";
 import { searchSessionByToken } from "../repositories/session.repository.js";
+import urlMetadata from "url-metadata";
 
 export async function publishPost(req, res) {
   const { link, description } = req.body;
@@ -17,8 +18,23 @@ export async function publishPost(req, res) {
 export async function getAllPosts(req, res) {
   try {
     const query = await getAllPostsFromDb();
+    const response = [];
+    
+    for( let i = 0; i < query.rows.length; i++ ) {
+      const metadados = await urlMetadata(query.rows[i].link);
 
-    res.status(200).send(query.rows)
+      const metadataUrl = {
+        title: metadados.title === '' ? metadados["og:title"] : metadados.title,
+        url: metadados.url,
+        image: metadados.image === '' ? metadados["og:image"] : metadados.image,
+        description: metadados.description === '' ? metadados["og:description"] : metadados.description,
+      };
+
+      const post = { ...query.rows[i], metadataUrl };
+      response.push(post);
+    }
+
+    res.status(200).send(response)
   } catch (error) {
     res.status(500).send({ message: error.message });
   };
