@@ -48,7 +48,7 @@ export async function signIn(req, res) {
         const photo = usuarioExistente.rows[0].photo;
         await insertSession(token, userId);
 
-        res.status(200).send({ token: token, name: name, photo: photo});
+        res.status(200).send({ token: token, name: name, photo: photo });
 
     } catch (error) {
         console.log("Erro ao fazer login: ", error.message);

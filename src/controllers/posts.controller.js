@@ -17,9 +17,11 @@ export async function publishPost(req, res) {
 
 export async function getAllPosts(req, res) {
   try {
+    const user_id = await searchSessionByToken(res.locals.token);
     const query = await getAllPostsFromDb();
     const response = [];
-    
+    const newQuery = query.rows.map(post => ({...post, requested_by: user_id.rows[0].user_id}))
+  
     for( let i = 0; i < query.rows.length; i++ ) {
       const metadados = await urlMetadata(query.rows[i].link);
 
@@ -30,10 +32,12 @@ export async function getAllPosts(req, res) {
         description: metadados.description === '' ? metadados["og:description"] : metadados.description,
       };
 
-      const post = { ...query.rows[i], metadataUrl };
+      const post = { ...newQuery[i], metadataUrl };
       response.push(post);
     }
 
+  
+    
     res.status(200).send(response)
   } catch (error) {
     res.status(500).send({ message: error.message });

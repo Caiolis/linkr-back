@@ -9,7 +9,7 @@ export async function publishPostIntoDb(link, description, userId) {
 
 export function getAllPostsFromDb() {
   return db.query(
-    `SELECT posts.created_at, posts.link, posts.description, users.name, users.photo FROM posts JOIN users on posts.user_id = users.id ORDER BY posts.created_at DESC LIMIT 20;`
+    `SELECT posts.created_at, posts.link, posts.user_id, posts.id, posts.description, users.name,  users.photo FROM posts JOIN users on posts.user_id = users.id ORDER BY posts.created_at DESC LIMIT 20;`
   );
 }
 export async function selectUserPost(user_id, post_id) {
@@ -24,3 +24,6 @@ export async function updateUserPost(description, post_id) {
   return await db.query(`UPDATE posts SET description = $1 WHERE id = $2;`, [description, post_id]);
 }
 
+export async function getUserPosts(id) {
+  return await db.query(`SELECT posts.*, users.name, users.photo FROM posts JOIN users on posts.user_id = users.id WHERE user_id = $1 ORDER BY posts.created_at DESC;`, [id]);
+}
