@@ -11,6 +11,7 @@ export async function publishPost(req, res) {
 
     return res.status(201).send('Post published');
   } catch (error) {
+    console.log(error.message);
     res.status(500).send({ message: error.message });
   };
 };
@@ -40,6 +41,7 @@ export async function getAllPosts(req, res) {
     
     res.status(200).send(response)
   } catch (error) {
+    console.log(error.message);
     res.status(500).send({ message: error.message });
   };
 };
@@ -57,6 +59,7 @@ export async function deletePost(req, res) {
 
     return res.status(200).send('Post deleted');
   } catch (error) {
+    console.log(error.message);
     res.status(500).send({ message: error.message });
   }
 }
@@ -75,6 +78,7 @@ export async function updatePost(req, res) {
 
     return res.status(200).send({message: 'Post updated'});
   } catch (error) {
+    console.log(error.message);
     res.status(500).send({ message: error.message })
   }
 }

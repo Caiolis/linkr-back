@@ -18,8 +18,9 @@ export async function likesGET(req, res)
 		
 		return res.status(200).send({likes:likes.rowCount,you:you,
 		});
-	}catch(err){
-		return res.status(500).send({message: err.message})}
+	}catch(error){
+		console.log(error.message);
+		return res.status(500).send({message: error.message})}
 }
 export async function likesPOST(req, res) 
 {
@@ -31,7 +32,10 @@ export async function likesPOST(req, res)
 		const user_id = session.rows[0].user_id
 		await likesINSERT(post_id, user_id)
 		return res.sendStatus(201)
-	}catch(err){return res.status(500).send({message: err.message})}
+	}catch(error){
+		console.log(error.message);	
+		res.status(500).send({message: error.message})
+	}
 }
 export async function likesDELETE(req, res) 
 {
@@ -44,8 +48,9 @@ export async function likesDELETE(req, res)
 		await likesDELETEfrom(post_id,user_id)
 		console.log(session.rows)
 		return res.status(201).send({you:session})
-	}catch(err){
-		return res.status(500).send({message: err.message})
+	}catch(error){
+		console.log(error.message);	
+		res.status(500).send({message: error.message})
 	}
 }
 export async function likesUSERSGET(req, res) 
@@ -55,5 +60,8 @@ export async function likesUSERSGET(req, res)
 	{
 		const likes = await likesSELECTJoined(post_id)
 		return res.status(200).send(likes.rows)
-	}catch(err){return res.status(500).send({message: err.message})}
+	}catch(error){
+		console.log(error.message);	
+		res.status(500).send({message: error.message})
+	}
 }

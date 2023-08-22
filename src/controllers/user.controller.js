@@ -19,6 +19,7 @@ export async function openUserPage(req, res){
         res.status(200).send(newUserPosts);
     }
     catch(error){
+        console.log(error.message);
         res.status(500).send(error.message);
     }
 }
