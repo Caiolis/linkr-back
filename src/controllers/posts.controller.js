@@ -32,10 +32,8 @@ export async function getAllPosts(req, res) {
         image: metadados.image === '' ? metadados["og:image"] : metadados.image,
         description: metadados.description === '' ? metadados["og:description"] : metadados.description,
       };
-      console.log(metadados);
       const post = { ...newQuery[i], metadataUrl };
       response.push(post);
-      console.log(response.rows);
     }
     res.status(200).send(response)
   } catch (error) {
