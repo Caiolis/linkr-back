@@ -24,7 +24,7 @@ export async function getAllPosts(req, res) {
     const newQuery = query.rows.map(post => ({...post, requested_by: user_id.rows[0].user_id}))
   
     for( let i = 0; i < query.rows.length; i++ ) {
-      const metadados = await urlMetadata(query.rows[i].link);
+      const metadados = await urlMetadata(query.rows[i].link);;
 
       const metadataUrl = {
         title: metadados.title === '' ? metadados["og:title"] : metadados.title,
@@ -32,13 +32,11 @@ export async function getAllPosts(req, res) {
         image: metadados.image === '' ? metadados["og:image"] : metadados.image,
         description: metadados.description === '' ? metadados["og:description"] : metadados.description,
       };
-
+      console.log(metadados);
       const post = { ...newQuery[i], metadataUrl };
       response.push(post);
+      console.log(response.rows);
     }
-
-  
-    
     res.status(200).send(response)
   } catch (error) {
     console.log(error.message);
