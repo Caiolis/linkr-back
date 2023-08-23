@@ -6,7 +6,6 @@ import { tokenvalidade } from "../middlewares/session.validaded.js";
 const userRouter = Router();
 
 userRouter.get("/user/:id", openUserPage);
-// userRouter.get("/search", tokenvalidade, searchBar);
 userRouter.get("/search", tokenvalidade, searchUser);
 
 export default userRouter;

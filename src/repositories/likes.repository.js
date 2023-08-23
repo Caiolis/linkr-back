@@ -1,7 +1,7 @@
 import { db } from "../database/database.js";
 
-export async function likesSELECT(post_id) {
-	return await db.query(`SELECT * FROM likes WHERE post_id = $1`,[post_id]);
+export async function likesSELECT(searchPost) {
+	return await db.query(`SELECT * FROM likes WHERE post_id = $1`,[searchPost]);
 };
 export async function likesINSERT(post_id,user_id) {
 	return await db.query(`INSERT INTO likes (post_id,user_id) VALUES ($1,$2)`,[post_id,user_id]);
