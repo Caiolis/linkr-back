@@ -1,6 +1,7 @@
 import { selectSession } from "../repositories/session.repository.js";
 import { getUserPosts } from "../repositories/posts.repository.js";
 import { getUsersBySearchBar } from "../repositories/user.repository.js";
+import urlMetadata from "url-metadata";
 
 export async function openUserPage(req, res){
 
@@ -49,4 +50,38 @@ function removeDuplicateUsers(usersList) {
     return uniqueList;
 }
 
+export async function getAllUserPosts(req, res){
 
+    const { authorization } = req.headers; 
+    const token = authorization?.replace("Bearer ", "");
+    const { id } = req.params;
+
+    try {
+
+        const user_id = await selectSession(token);
+        if (user_id.rowCount === 0){
+            return res.status(404).send("Usuário não está logado!");
+        }
+        const query = await getUserPosts(id);
+        const response = [];
+        const newQuery = query.rows.map(post => ({...post, requested_by: user_id.rows[0].user_id}))
+      
+        for( let i = 0; i < query.rows.length; i++ ) {
+          const metadados = await urlMetadata(query.rows[i].link);
+    
+          const metadataUrl = {
+            title: metadados.title === '' ? metadados["og:title"] : metadados.title,
+            url: metadados.url,
+            image: metadados.image === '' ? metadados["og:image"] : metadados.image,
+            description: metadados.description === '' ? metadados["og:description"] : metadados.description,
+          };
+          const post = { ...newQuery[i], metadataUrl };
+          response.push(post);
+        }
+        res.status(200).send(response)
+      } catch (error) {
+        console.log(error.message);
+        res.status(500).send({ message: error.message });
+      };
+
+}
